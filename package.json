@@ -5,6 +5,11 @@
   "repository": "git@github.com:juliofilizzola/MailBridge.git",
   "author": "julio_filizzola <juliofilizzola@hotmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
   "devDependencies": {
     "@types/node": "^25.9.1",
     "@types/nodemailer": "^8.0.0",
@@ -12,6 +17,7 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.1056.0",
     "@sendgrid/mail": "^8.1.6",
     "dotenv": "^17.4.2",
     "nodemailer": "^8.0.9"
