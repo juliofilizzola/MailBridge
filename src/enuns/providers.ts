@@ -1,4 +1,4 @@
 export enum Providers {
-    SENDGRID = 'sendgrid',
-    NODEMAILER = 'nodemailer'
+  SENDGRID = 'sendgrid',
+  NODEMAILER = 'nodemailer',
 }
