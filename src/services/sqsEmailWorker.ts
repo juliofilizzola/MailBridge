@@ -1,11 +1,11 @@
 import {
-  ReceiveMessageCommand,
   DeleteMessageCommand,
-  type SQSClient,
   type Message,
+  ReceiveMessageCommand,
+  type SQSClient,
 } from '@aws-sdk/client-sqs';
+import { MAX_NUMBER_MESSAGE, WAIT_TIME_MESSAGE } from '@src/commons/constants';
 import type { MailDispatcherService } from '@src/services/MailDispatcherService';
-import {MAX_NUMBER_MESSAGE, WAIT_TIME_MESSAGE} from "@src/commons/constants";
 
 export class SqsEmailWorker {
   private sqsClient: SQSClient;
@@ -27,7 +27,6 @@ export class SqsEmailWorker {
     }
   }
 
-
   public stopPolling(): void {
     this.isPollingActive = false;
   }
@@ -42,16 +41,13 @@ export class SqsEmailWorker {
 
       const response = await this.sqsClient.send(receiveMessageCommand);
 
-      if (!response.Messages){
+      if (!response.Messages) {
         return;
       }
 
-
       for (const message of response.Messages) {
-
+        await this.processMessage(message);
       }
-
-
     } catch (error) {
       console.error('Error processing SQS queue:', error);
     }
