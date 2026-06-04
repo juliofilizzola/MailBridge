@@ -8,13 +8,3 @@ indent_style = space
 insert_final_newline = false
 max_line_length = 120
 tab_width = 2
-
-[{*.ats,*.cts,*.mts,*.ts}]
-indent_size = 2
-tab_width = 2
-
-[{*.tf,*.tfvars}]
-indent_size = 2
-
-[{*.yaml,*.yml}]
-indent_size = 2
