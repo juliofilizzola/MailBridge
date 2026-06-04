@@ -1,5 +1,5 @@
-import type {EmailPayload, EmailProvider} from "@src/interface/types";
-import nodemailer from "nodemailer";
+import type { EmailPayload, EmailProvider } from '@src/interface/types';
+import nodemailer from 'nodemailer';
 
 export class NodemailerProvider implements EmailProvider {
   private mailTransporter: nodemailer.Transporter;
@@ -26,5 +26,4 @@ export class NodemailerProvider implements EmailProvider {
 
     await this.mailTransporter.sendMail(mailOptions);
   }
-
 }
