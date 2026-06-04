@@ -1,10 +1,10 @@
-import type { EmailPayload, EmailProvider } from '@src/interface/types';
+import type {EmailPayload, EmailProvider, NodemailerConfig} from '@src/interface/types';
 import nodemailer from 'nodemailer';
 
 export class NodemailerProvider implements EmailProvider {
   private mailTransporter: nodemailer.Transporter;
 
-  constructor(host: string, port: number, user: string, pass: string) {
+  constructor({host, port, auth: { user, pass }}: NodemailerConfig) {
     this.mailTransporter = nodemailer.createTransport({
       host,
       port,
