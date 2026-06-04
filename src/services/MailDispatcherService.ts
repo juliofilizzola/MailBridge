@@ -1,5 +1,4 @@
-import type { EmailPayload, EmailProvider } from "@src/interface/types";
-
+import type { EmailPayload, EmailProvider } from '@src/interface/types';
 
 export class MailDispatcherService {
   private activeEmailProvider: EmailProvider;
