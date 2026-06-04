@@ -1,7 +1,7 @@
 import sgMail from '@sendgrid/mail';
 import type { EmailPayload, EmailProvider } from '@src/interface/types';
 
-export class sendGridProvider implements EmailProvider {
+export class SendGridProvider implements EmailProvider {
   constructor(apiKey: string) {
     sgMail.setApiKey(apiKey);
   }
