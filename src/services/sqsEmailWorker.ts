@@ -5,6 +5,7 @@ import {
   type SQSClient,
 } from '@aws-sdk/client-sqs';
 import { MAX_NUMBER_MESSAGE, WAIT_TIME_MESSAGE } from '@src/commons/constants';
+import type { SQSMessagePayload } from '@src/interface/SQS';
 import type { MailDispatcherService } from '@src/services/MailDispatcherService';
 
 export class SqsEmailWorker {
@@ -12,6 +13,7 @@ export class SqsEmailWorker {
   private readonly queueUrl: string;
   private mailDispatcher: MailDispatcherService;
   private isPollingActive: boolean;
+
   constructor(sqsClient: SQSClient, queueUrl: string, mailDispatcher: MailDispatcherService) {
     this.sqsClient = sqsClient;
     this.queueUrl = queueUrl;
@@ -60,15 +62,15 @@ export class SqsEmailWorker {
         return;
       }
 
-      const parseMessage = JSON.parse(message.Body);
-      await this.mailDispatcher.dispatchEmail(parseMessage.emailData);
+      const parseMessage: SQSMessagePayload = JSON.parse(message.Body);
+      await this.mailDispatcher.dispatchEmail(parseMessage);
       await this.deleteMessage(message.ReceiptHandle);
     } catch (error) {
       console.error('Error processing SQS message:', error);
     }
   }
 
-  private async deleteMessage(messageRecipeHandle: string | undefined) {
+  private async deleteMessage(messageRecipeHandle: string | undefined): Promise<void> {
     if (!messageRecipeHandle) {
       return;
     }
