@@ -25,8 +25,7 @@ export class SqsEmailWorker {
     this.isPollingActive = true;
 
     while (this.isPollingActive) {
-      setTimeout(() => {
-      }, 100000)
+      setTimeout(() => {}, 100000);
       await this.processQueue();
     }
   }

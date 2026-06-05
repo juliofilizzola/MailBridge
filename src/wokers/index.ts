@@ -13,7 +13,7 @@ const awsSqsClientInstance = new SQSClient({
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'teste-local-id',
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'teste-local-secret',
-  }
+  },
 });
 
 const mailDispatcherServiceInstance = new MailDispatcherService(emailProviderRegistryMap);
