@@ -24,6 +24,9 @@ make up
 docker-compose up -d --build
 ```
 
+**Criar a fila no LocalStack (uma vez):**
+docker-compose exec localstack_service awslocal sqs create-queue --queue-name mail-bridge-local-queue
+
 ### 2. Ambiente Local (Desenvolvimento)
 Ideal para depuração rápida do código.
 
