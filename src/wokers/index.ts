@@ -9,6 +9,11 @@ const sqsQueueUrl = process.env.SQS_QUEUE_URL || '';
 
 const awsSqsClientInstance = new SQSClient({
   region: awsRegion,
+  endpoint: sqsQueueUrl,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'teste-local-id',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'teste-local-secret',
+  },
 });
 
 const mailDispatcherServiceInstance = new MailDispatcherService(emailProviderRegistryMap);

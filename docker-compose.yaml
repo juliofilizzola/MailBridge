@@ -1,0 +1,18 @@
+services:
+  localstack_service:
+    image: localstack/localstack:4.4.0
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs
+      - AWS_DEFAULT_REGION=us-east-1
+
+  app_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    env_file:
+      - .env
+    depends_on:
+      - localstack_service

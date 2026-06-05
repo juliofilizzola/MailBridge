@@ -1,23 +1,25 @@
 {
-   "compilerOptions": {
-    "module": "ESNext",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "CommonJS",
     "target": "esnext",
     "types": [],
-
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["./src/*"]
     },
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
-  }
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
