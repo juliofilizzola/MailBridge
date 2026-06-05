@@ -1,4 +1,4 @@
-import { worker } from '@src/wokers';
+import { registerGracefulShutdownListeners, worker } from '@src/wokers';
 
 const initServer = async () => {
   await worker();
@@ -11,3 +11,5 @@ initServer()
   .catch((error) => {
     console.error('Error initializing server:', error);
   });
+
+registerGracefulShutdownListeners();
