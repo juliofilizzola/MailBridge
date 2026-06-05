@@ -16,7 +16,6 @@ switch ($Target) {
         Write-Host "  .\make.ps1 install     - Instala as dependências (frozen-lockfile)"
         Write-Host "  .\make.ps1 dev         - Roda a aplicação localmente"
         Write-Host "  .\make.ps1 build       - Compila o código TypeScript"
-        Write-Host "  .\make.ps1 test-publish- Publica uma mensagem na fila via script"
         Write-Host "  .\make.ps1 lint        - Verifica erros com ESLint"
         Write-Host "  .\make.ps1 lint-fix    - Corrige formatação e imports"
         Write-Host "  .\make.ps1 format      - Força formatação com Prettier"
@@ -33,7 +32,6 @@ switch ($Target) {
     "install" { Invoke-Expression "$YARN install --frozen-lockfile" }
     "dev" { Invoke-Expression "$YARN dev" }
     "build" { Invoke-Expression "$YARN build" }
-    "test-publish" { Invoke-Expression "$YARN publish:test" }
     "lint" { Invoke-Expression "$YARN lint" }
     "lint-fix" { Invoke-Expression "$YARN lint:fix" }
     "format" { Invoke-Expression "$YARN format" }
