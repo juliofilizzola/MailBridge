@@ -1,15 +1,11 @@
 services:
   localstack_service:
-    image: localstack/localstack:latest
+    image: localstack/localstack:4.4.0
     ports:
       - "4566:4566"
-      - "4571:4571"
     environment:
       - SERVICES=sqs
-      - DEFAULT_REGION=us-east-1
-      - DATA_DIR=/tmp/localstack/data
-    volumes:
-      - ./localstack:/tmp/localstack
+      - AWS_DEFAULT_REGION=us-east-1
 
   app_service:
     build:
