@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
@@ -24,6 +24,7 @@
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "prettier": "^3.8.3",
+    "tsc-alias": "^1.8.17",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.60.1"
