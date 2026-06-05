@@ -1,17 +1,18 @@
-import type { EmailPayload, EmailProvider, NodemailerConfig } from '@src/interface/types';
+import type { EmailPayload, EmailProvider } from '@src/interface/types';
 import nodemailer from 'nodemailer';
 
 export class NodemailerProvider implements EmailProvider {
   private mailTransporter: nodemailer.Transporter;
 
-  constructor({ host, port, auth: { user, pass } }: NodemailerConfig) {
+  constructor() {
+    const port = parseInt(process.env.SMTP_PORT || '', 10) || 587;
     this.mailTransporter = nodemailer.createTransport({
-      host,
+      host: process.env.SMTP_SERVER || '',
       port,
-      secure: port === 465, // true for 465, false for other ports
+      secure: port === 465,
       auth: {
-        user,
-        pass,
+        user: process.env.SMTP_USER || '',
+        pass: process.env.SQS_QUEUE_URL || '',
       },
     });
   }
