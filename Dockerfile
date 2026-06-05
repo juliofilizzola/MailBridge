@@ -14,8 +14,10 @@ FROM node:lts-alpine AS runner
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+COPY --from=worker /app/package.json /app/yarn.lock ./
+RUN yarn install --frozen-lockfile --production
+
 COPY --from=worker /app/dist ./dist
-COPY --from=worker /app/node_modules ./node_modules
-COPY --from=worker /app/package.json ./package.json
 
 CMD ["yarn", "start"]
