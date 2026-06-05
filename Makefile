@@ -1,4 +1,4 @@
-.PHONY: help install up down restart logs dev build lint lint-fix format test-publish audit clean
+.PHONY: help install up down restart logs dev build lint lint-fix format audit clean
 
 # --- Variáveis ---
 DC = docker-compose
@@ -30,9 +30,6 @@ dev: ## Roda a aplicação localmente no terminal
 
 build: ## Compila o código TypeScript para CommonJS na pasta dist/
 	$(YARN) build
-
-test-publish: ## Publica uma mensagem de teste na fila SQS via script
-	$(YARN) publish:test
 
 # --- Qualidade e Segurança ---
 lint: ## Verifica erros no código com ESLint
