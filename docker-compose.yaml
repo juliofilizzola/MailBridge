@@ -11,7 +11,7 @@ services:
     volumes:
       - ./localstack:/tmp/localstack
 
-  mailBridge:
+  app_service:
     build:
       context: .
       dockerfile: Dockerfile
