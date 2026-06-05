@@ -9,6 +9,8 @@ O projeto pode ser executado de duas formas principais: via Docker (recomendado 
 ### 1. Ambiente Docker (LocalStack)
 Esta opção sobe toda a infraestrutura necessária, incluindo um container LocalStack para simular o SQS e a própria aplicação.
 
+Antes de subir, copie `.env.exemple` para `.env` e ajuste os valores (no Docker, use `localstack_service` ao invés de `localhost`).
+
 **Via Makefile (Linux/macOS):**
 ```bash
 make up
