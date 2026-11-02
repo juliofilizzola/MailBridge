@@ -1,3 +1,4 @@
+import { PermanentError } from '@src/commons/errors';
 import { Providers } from '@src/enums/providers';
 import type { SQSMessagePayload } from '@src/interface/SQS';
 import type { EmailProvider } from '@src/interface/types';
@@ -12,7 +13,7 @@ export class MailDispatcherService {
   public async dispatchEmail(payload: SQSMessagePayload): Promise<void> {
     const selectProviderInstance = this.providerRegistry.get(payload.targetProvider);
     if (!selectProviderInstance) {
-      throw new Error('Provider not found');
+      throw new PermanentError(`Provider "${payload.targetProvider}" is not configured`);
     }
 
     await selectProviderInstance.sendEmail(payload.emailData);
