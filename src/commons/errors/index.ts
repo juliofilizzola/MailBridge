@@ -16,6 +16,23 @@ export class HttpError extends Error {
   }
 }
 
+export class UnauthorizedError extends Error {
+  constructor(message = 'Invalid or missing API key') {
+    super(message);
+    this.name = 'UnauthorizedError';
+  }
+}
+
+export class RateLimitExceededError extends Error {
+  public readonly retryAfterSeconds: number;
+
+  constructor(retryAfterSeconds: number) {
+    super('Rate limit exceeded');
+    this.name = 'RateLimitExceededError';
+    this.retryAfterSeconds = retryAfterSeconds;
+  }
+}
+
 export class ValidationError extends PermanentError {
   public readonly issues: string[];
 
