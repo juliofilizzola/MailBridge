@@ -26,8 +26,11 @@ make up
 docker-compose up -d --build
 ```
 
-**Criar a fila no LocalStack (uma vez):**
+**Criar as filas no LocalStack (uma vez):**
+```bash
 docker-compose exec localstack_service awslocal sqs create-queue --queue-name mail-bridge-local-queue
+docker-compose exec localstack_service awslocal sqs create-queue --queue-name mail-bridge-local-dlq
+```
 
 ### 2. Ambiente Local (Desenvolvimento)
 Ideal para depuração rápida do código.
@@ -41,6 +44,33 @@ Ideal para depuração rápida do código.
     ```bash
     yarn dev
     ```
+
+---
+
+## 🔄 Fluxo
+
+```
+Cliente ──POST /v1/emails──▶ API (API key + rate limit + validação) ──▶ SQS ──▶ Worker ──▶ SendGrid | Gmail | SMTP
+                                                                           │
+                                               falha transitória: backoff exponencial (ChangeMessageVisibility)
+                                               falha permanente ou tentativas esgotadas: DLQ (SQS_DLQ_URL)
+```
+
+**Enviar um e-mail:**
+```bash
+curl -X POST http://localhost:3000/v1/emails   -H "x-api-key: chave_local_1" -H "Content-Type: application/json"   -d '{"targetProvider":"sendgrid","emailData":{"senderAddress":"no-reply@exemplo.com","recipientAddress":"user@exemplo.com","subject":"Oi","body":"Texto","html":"<p>Texto</p>"}}'
+```
+
+Respostas: `202` enfileirado (`messageId`), `401` API key inválida, `422` payload inválido (lista `issues`), `429` rate limit (`Retry-After`), `413` body maior que 256 KB.
+
+`APP_ROLE` permite rodar API e worker no mesmo processo (`all`) ou separados (`api` / `worker`) para escalar cada um.
+
+## 🧪 Testes
+
+```bash
+yarn test
+yarn typecheck
+```
 
 ---
 
@@ -71,20 +101,17 @@ O MailBridge foi desenhado seguindo o princípio Open/Closed. Para adicionar um 
     ```
 
 3.  **Registre o Provider:**
-    No arquivo `src/wokers/emailProviderRegistryMap.ts`, instancie seu provedor e adicione-o ao mapa:
+    No arquivo `src/workers/emailProviderRegistryMap.ts`, dentro de `buildEmailProviderRegistry`, registre o provedor somente quando as credenciais existirem:
     ```typescript
     import { MyNewProvider } from '@src/providers/MyNewProvider';
 
-    const myNewProvider = new MyNewProvider();
-
-    export const emailProviderRegistryMap: Map<Providers, EmailProvider> = new Map<
-      Providers,
-      EmailProvider
-    >([
-      // ... registros existentes
-      [Providers.MY_NEW_PROVIDER, myNewProvider],
-    ]);
+    const myNewApiKey = optional(env.MY_NEW_PROVIDER_API_KEY);
+    if (myNewApiKey) {
+      registry.set(Providers.MY_NEW_PROVIDER, new MyNewProvider(myNewApiKey));
+    }
     ```
+
+4.  **Classifique os erros:** lance `PermanentError` (`@src/commons/errors`) para falhas que não adianta repetir (ex.: HTTP 4xx). Qualquer outro erro é tratado como transitório e entra no retry.
 
 ---
 
@@ -96,6 +123,12 @@ O arquivo `.env` deve conter as seguintes configurações:
 *   `SQS_QUEUE_URL`: URL da fila SQS de onde o worker consumirá.
 *   `SMTP_*`: Configurações para o provedor Nodemailer.
 *   `SENDGRID_API_KEY`: Chave de API para o provedor SendGrid.
+*   `GMAIL_USER` + `GMAIL_APP_PASSWORD` (ou `GMAIL_CLIENT_ID` / `GMAIL_CLIENT_SECRET` / `GMAIL_REFRESH_TOKEN`): provedor Gmail.
+*   `API_KEYS`: chaves aceitas pela API, separadas por vírgula.
+*   `RATE_LIMIT_MAX_REQUESTS` / `RATE_LIMIT_WINDOW_SECONDS`: limite por API key.
+*   `SQS_DLQ_URL`: fila de dead-letter (recomendado em produção; sem ela mensagens que esgotam o retry são descartadas com log de erro).
+*   `MAX_RECEIVE_ATTEMPTS` / `RETRY_BASE_DELAY_SECONDS` / `RETRY_MAX_DELAY_SECONDS`: política de retry.
+*   `APP_ROLE`: `api`, `worker` ou `all`.
 *   `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`: Credenciais AWS.
 
 ---
