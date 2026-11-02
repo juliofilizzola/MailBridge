@@ -19,7 +19,7 @@ const positiveInt = (name: string, value: string | undefined, fallback: number):
     return fallback;
   }
   const parsed = Number(value);
-  if (!Number.isInteger(parsed) || !parsed) {
+  if (!Number.isInteger(parsed) || parsed <= 0) {
     throw new Error(`${name} must be a positive integer`);
   }
   return parsed;
@@ -43,7 +43,7 @@ export const loadConfig = (env: NodeJS.ProcessEnv = process.env): AppConfig => {
     .map((apiKey) => apiKey.trim())
     .filter((apiKey) => Boolean(apiKey.length));
 
-  if (role !== 'worker' && Boolean(apiKeys.length)) {
+  if (role !== 'worker' && !apiKeys.length) {
     throw new Error('API_KEYS is required when the API is enabled');
   }
 
