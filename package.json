@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/node": "^25.9.1",
+    "@types/node": "25.9.9",
     "@types/nodemailer": "8.0.0",
     "@typescript-eslint/eslint-plugin": "8.60.1",
     "@typescript-eslint/parser": "8.60.1",
@@ -36,6 +36,7 @@
     "@aws-sdk/client-sqs": "3.1056.0",
     "@sendgrid/mail": "8.1.6",
     "dotenv": "17.4.2",
+    "http-status-codes": "2.3.0",
     "nodemailer": "10.1.4"
   }
 }
